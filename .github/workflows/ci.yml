@@ -40,7 +40,15 @@ jobs:
           ufbt status | tee /tmp/ufbt-status.txt
           grep -Eq 'uFBT version[[:space:]]+0\.2\.6$' /tmp/ufbt-status.txt
           grep -Eq 'Target[[:space:]]+f7$' /tmp/ufbt-status.txt
-          grep -Eq 'Version[[:space:]]+1\.4\.3$' /tmp/ufbt-status.txt
+          grep -Eq 'Mode[[:space:]]+local$' /tmp/ufbt-status.txt
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          components = json.loads((Path.home() / ".ufbt/current/components.json").read_text())
+          assert components["meta"]["hw_target"] == "f7"
+          assert components["meta"]["version"] == "1.4.3"
+          PY
 
       - name: Source policy checks
         run: |
