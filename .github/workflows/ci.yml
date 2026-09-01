@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pepper-key-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install pinned uFBT
+        run: python -m pip install --disable-pip-version-check "ufbt==0.2.6"
+
+      - name: Install pinned official F7 SDK
+        shell: bash
+        run: |
+          set -euo pipefail
+          sdk_url="https://update.flipperzero.one/builds/firmware/1.4.3/flipper-z-f7-sdk-1.4.3.zip"
+          curl --fail --location --silent --show-error "$sdk_url" --output /tmp/flipper-z-f7-sdk-1.4.3.zip
+          printf '%s  %s\n' \
+            '2e89e70c6b5770440cbf02f2ca01a2f8804e05ddb77f66afdd23ed2584740c7f' \
+            '/tmp/flipper-z-f7-sdk-1.4.3.zip' | sha256sum --check --strict
+          ufbt update --local /tmp/flipper-z-f7-sdk-1.4.3.zip
+          ufbt status | tee /tmp/ufbt-status.txt
+          grep -Eq 'uFBT version[[:space:]]+0\.2\.6$' /tmp/ufbt-status.txt
+          grep -Eq 'Target[[:space:]]+f7$' /tmp/ufbt-status.txt
+          grep -Eq 'Version[[:space:]]+1\.4\.3$' /tmp/ufbt-status.txt
+
+      - name: Source policy checks
+        run: |
+          sh tests/check-source.sh
+          sh tests/check-security-fixes.sh
+
+      - name: Lint and build external FAP
+        working-directory: app
+        run: |
+          ufbt lint
+          ufbt faps
+
+      - name: Record artifact digest
+        run: sha256sum app/dist/pepper_key.fap | tee pepper_key.fap.sha256
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pepper-key-fap-${{ github.sha }}
+          path: |
+            app/dist/pepper_key.fap
+            pepper_key.fap.sha256
+          if-no-files-found: error
+          retention-days: 14

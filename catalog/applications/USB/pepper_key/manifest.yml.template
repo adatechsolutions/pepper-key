@@ -1,0 +1,13 @@
+# Draft only. Rename to manifest.yml only after replacing both placeholders,
+# adding app/screenshots/ss0.png, and passing the official bundle validator.
+sourcecode:
+  type: git
+  location:
+    origin: "https://github.com/adatechsolutions/pepper-key.git"
+    commit_sha: "REPLACE_WITH_FULL_40_CHARACTER_COMMIT_SHA"
+    subdir: app
+short_description: Hardened USB U2F authenticator
+description: "@catalog-description.md"
+changelog: "@changelog.md"
+screenshots:
+  - screenshots/ss0.png

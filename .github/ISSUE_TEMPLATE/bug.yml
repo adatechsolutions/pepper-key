@@ -1,0 +1,41 @@
+name: Bug report
+description: Report a reproducible PepperKey build or runtime problem.
+title: "bug: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Do not attach app data, identifiers, accounts, recovery codes, authentication captures, or key material.
+  - type: input
+    id: version
+    attributes:
+      label: PepperKey version or commit
+    validations:
+      required: true
+  - type: input
+    id: firmware
+    attributes:
+      label: Official Flipper firmware and API version
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Redacted reproduction steps
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety confirmation
+      options:
+        - label: I used a disposable account and retained an independent authenticator.
+          required: true
+        - label: This report contains no private authentication or device data.
+          required: true
