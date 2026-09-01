@@ -10,7 +10,7 @@ The GPL application is free to download, modify, and redistribute under its lice
 
 1. **Compatibility assessment:** a scoped lab report for named OS, browser, relying party, and recovery conditions.
 2. **Controlled deployment workshop:** setup, backup-authenticator policy, recovery rehearsal, and operator training for labs or education teams.
-3. **Release qualification:** reproducible build, artifact/commit binding, acceptance execution, and evidence package.
+3. **Release qualification:** pinned build, exact artifact/commit binding, acceptance execution, and evidence package.
 4. **Maintainer support:** bounded response targets, issue triage, upgrade assessment, and documented exclusions under a separate agreement.
 5. **Sponsorship:** public roadmap support without private forks that conflict with GPL distribution obligations.
 

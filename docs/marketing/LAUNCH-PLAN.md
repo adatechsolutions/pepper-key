@@ -11,7 +11,7 @@ The launch is evidence-led: public source first, physical acceptance second, Cat
 - Flipper Zero developers and enthusiasts.
 - Security educators and lab operators.
 - Developers maintaining legacy U2F integrations.
-- Technical teams interested in reproducible embedded security workflows.
+- Technical teams interested in evidence-backed embedded security workflows.
 
 ## Positioning
 
@@ -59,7 +59,7 @@ Do not run broad consumer, fear-based security, passkey, certification, or compe
 2. Week 2: threat-model deep dive and recovery checklist.
 3. Week 3: device demo and compatibility matrix.
 4. Week 4: “U2F vs CTAP2/passkeys” limits explainer.
-5. Week 5: reproducible embedded release workflow case study.
+5. Week 5: pinned embedded release workflow and artifact-binding case study.
 6. Week 6: compatibility findings, roadmap decision, and support offer.
 
 ## Funnel and measurement

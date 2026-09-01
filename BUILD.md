@@ -21,6 +21,8 @@ The script uses AdaTech's configured resource and heavy-job helpers, verifies uF
 
 CI uses the official 1.4.3 F7 SDK archive pinned by SHA-256. A local direct `ufbt faps` command is for development only and is not release evidence.
 
+The standard uFBT FAP includes a four-byte `.gnu_debuglink` checksum for the host-specific debug ELF. Linux CI and macOS release builds can therefore have different whole-file SHA-256 values even when their runtime sections and assets are identical. The release receipt must identify and distribute the exact FAP used for physical acceptance; do not substitute a different host build by comparing source alone.
+
 Expected build artifact:
 
 ```text

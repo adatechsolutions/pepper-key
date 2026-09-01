@@ -12,7 +12,7 @@ All copy is draft-only until the release checklist passes. Pair every short ad w
 
 **Headline:** What it takes to turn a prototype authenticator into a reviewable release
 
-**Body:** We document PepperKey's threat model, fail-closed identity storage, USB lifecycle, reproducible build, independent security review, and the limits we refused to market past. Read the source, checks, acceptance plan, and release receipt.
+**Body:** We document PepperKey's threat model, fail-closed identity storage, USB lifecycle, pinned build, independent security review, and the limits we refused to market past. Read the source, checks, acceptance plan, and release receipt.
 
 ## LinkedIn organic
 
@@ -36,7 +36,7 @@ PepperKey: open-source USB U2F for Flipper Zero, locked by default and long-hold
 
 **Title:** We hardened Flipper's U2F app into a locked-by-default external FAP—source, threat model, and test gates
 
-**Body outline:** Explain the upstream pin, three remediated findings, exact USB-only scope, reproducible build, disposable-account evidence, and remaining limits. Ask for source review and compatibility reports; do not ask for upvotes or lead with a sales offer.
+**Body outline:** Explain the upstream pin, three remediated findings, exact USB-only scope, pinned build, disposable-account evidence, and remaining limits. Ask for source review and compatibility reports; do not ask for upvotes or lead with a sales offer.
 
 ## Video script
 

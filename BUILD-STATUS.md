@@ -19,6 +19,8 @@ Date: 2026-09-01
 - Corrected internal-firmware-only dependencies so the app builds as a genuine external FAP.
 - Built `app/dist/pepper_key.fap` with uFBT 0.2.6, SDK 1.4.3, target F7, API 87.1.
 - Recorded final candidate SHA-256 `e22b2cd543ad7bc02d4dd55b3b31770a8900a08065c585e1f7a7fb9ea62b445a` (69,096 bytes).
+- GitHub CI passed for commit `a8f50791449169c55c403ffd437a6e3e3ce2214c` and produced a 69,096-byte FAP with SHA-256 `90f4fc146212b51888db0ebb56c0e4a7cc22e6dcc3c0ab40a5c135df04001fd7`.
+- The CI and AdaTech FAPs differ only in the four-byte `.gnu_debuglink` checksum for their host-specific debug ELFs. Physical acceptance must bind to one exact artifact; byte-for-byte cross-host reproducibility is not claimed.
 
 ## Held
 
