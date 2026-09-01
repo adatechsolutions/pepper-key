@@ -37,7 +37,7 @@ jobs:
             '2e89e70c6b5770440cbf02f2ca01a2f8804e05ddb77f66afdd23ed2584740c7f' \
             '/tmp/flipper-z-f7-sdk-1.4.3.zip' | sha256sum --check --strict
           ufbt update --hw-target f7 --local /tmp/flipper-z-f7-sdk-1.4.3.zip
-          ufbt status | tee /tmp/ufbt-status.txt
+          ufbt status 2>&1 | tee /tmp/ufbt-status.txt
           grep -Eq 'uFBT version[[:space:]]+0\.2\.6$' /tmp/ufbt-status.txt
           grep -Eq 'Target[[:space:]]+f7$' /tmp/ufbt-status.txt
           grep -Eq 'Mode[[:space:]]+local$' /tmp/ufbt-status.txt
