@@ -52,6 +52,7 @@ jobs:
 
       - name: Source policy checks
         run: |
+          ./tests/check-core.sh
           sh tests/check-source.sh
           sh tests/check-security-fixes.sh
 

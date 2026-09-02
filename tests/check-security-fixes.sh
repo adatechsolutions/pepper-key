@@ -7,6 +7,11 @@ data_file=$project_dir/app/u2f_data.c
 core_file=$project_dir/app/u2f.c
 scene_file=$project_dir/app/scenes/u2f_scene_main.c
 app_file=$project_dir/app/u2f_app.c
+base32_file=$project_dir/app/pepper_base32.c
+otp_file=$project_dir/app/pepper_otp.c
+vault_file=$project_dir/app/pepper_vault.c
+challenge_file=$project_dir/app/pepper_challenge.c
+ctap2_file=$project_dir/app/pepper_ctap2.c
 
 require_text() {
     needle=$1
@@ -39,6 +44,20 @@ require_text 'u2f_scene_main_stop_session(app);' "$scene_file"
 require_text 'furi_event_flag_set(app->notification_flags' "$scene_file"
 require_text 'furi_event_loop_subscribe_event_flag' "$app_file"
 require_text 'A terminal error supersedes all queued/coalesced protocol notifications.' "$app_file"
+
+require_text 'PepperBase32NonCanonicalBits' "$base32_file"
+require_text 'pepper_secure_zero(output, written)' "$base32_file"
+require_text 'digits >= 6 && digits <= 8' "$otp_file"
+require_text 'pepper_secure_zero(digest, sizeof(digest))' "$otp_file"
+require_text 'header->namespace_id != (uint8_t)expected_namespace' "$vault_file"
+require_text 'PepperKey/v1/vault/' "$vault_file"
+require_text 'challenge_size > PEPPER_CHALLENGE_MAX_SIZE' "$challenge_file"
+require_text '.usb_cbor_transport = false' "$ctap2_file"
+require_text 'if(!readiness.usb_cbor_transport) return false;' "$ctap2_file"
+
+forbid_text '.usb_cbor_transport = true' "$ctap2_file"
+forbid_text 'FIDO_2_0' "$ctap2_file"
+forbid_text 'FIDO_2_1' "$ctap2_file"
 
 forbid_text 'uint8_t key_encrypted[48]' "$data_file"
 forbid_text 'uint8_t cnt_encr[48]' "$data_file"

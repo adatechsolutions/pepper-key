@@ -2,6 +2,17 @@
 
 This guide is mandatory for repository copy, the Apps Catalog, AdaTech pages, demos, ads, social posts, partner outreach, and support replies.
 
+## Alpha suite rule
+
+The Apps Catalog and v0.1 release remain U2F-only. The 0.2 alpha repository may say:
+
+- “Modular authenticator foundation in development.”
+- “Portable HOTP/TOTP core passes published RFC vectors.”
+- “Challenge-response and isolated vault-domain foundations are implemented in source.”
+- “CTAP2/passkeys, device OTP vault/UI, PIV, OpenPGP, Bluetooth/NFC authentication, and portable recovery remain gated.”
+
+`core-ready` must never be shortened to “supported,” “works,” “device-ready,” or “released.” A roadmap item must never be shown as an active device capability.
+
 ## Approved factual claims
 
 - “USB U2F/CTAP1 application for Flipper Zero.”
@@ -19,7 +30,7 @@ Only attach a platform/browser/service compatibility claim to a dated acceptance
 ## Required qualifiers
 
 - Legacy U2F/CTAP1 over a directly connected USB cable only.
-- Not FIDO Certified.
+- No PepperKey capability is FIDO Certified.
 - Not FIDO2/CTAP2, a passkey provider, NFC, or Bluetooth/BLE in v0.1.
 - Flipper Zero is general-purpose, user-flashable hardware without PepperKey-specific tamper resistance.
 - Browser and relying-party support varies.
@@ -28,7 +39,7 @@ Only attach a platform/browser/service compatibility claim to a dated acceptance
 ## Prohibited claims
 
 - “Unhackable,” “military-grade,” “bank-grade,” “enterprise-grade,” “certified,” or “guaranteed secure.”
-- “Phishing-proof,” “passkey,” “FIDO2,” “CTAP2,” “Bluetooth security key,” or “works everywhere.”
+- “Phishing-proof,” “passkey-ready,” “FIDO2-ready,” “CTAP2-ready,” “Bluetooth security key,” “all features enabled,” or “works everywhere” before the named capability is accepted.
 - “Replacement” or “equivalent” language for a named commercial security-key brand.
 - Any FIDO certification mark, Flipper logo, or wording that implies endorsement, partnership, or affiliation.
 - “Audited” without the qualifier “independent multi-pass static review”; do not imply a paid third-party audit.
@@ -41,3 +52,5 @@ Only attach a platform/browser/service compatibility claim to a dated acceptance
 - **Compatible:** disposable-account registration and authentication passed for the named platform/browser/service.
 - **Catalog-listed:** accepted by Flipper Apps Catalog moderation.
 - **Certified:** never use unless an applicable certification body grants it in writing.
+- **Core-ready:** bounded portable code passes named vectors; no on-device availability implied.
+- **Research:** architecture/dependency investigation only.
