@@ -16,7 +16,7 @@ Work lands in reviewable slices. A source-complete module remains disabled until
 - [x] Add fail-closed capability/readiness registry.
 - [x] Add architecture, protocol, recovery, security, and claims documents.
 - [x] Pass pinned uFBT lint/build in GitHub CI for commit `7dde1683a46d9ca3a9b648554504ed9ce77fc305`.
-- [ ] Pass the separate guarded Pro13 build from an allowed resource window.
+- [x] Pass the separate guarded Pro13 build from an allowed resource window; FAP SHA-256 `2efecbd26dc87623ac2b06aca07f6c56d289759696cf5ebe607af172b65bfaa7`.
 - [ ] Independently review this alpha diff.
 
 ## FIDO2 transport and parser — 0.3

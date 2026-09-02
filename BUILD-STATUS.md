@@ -42,6 +42,8 @@ Completed in source:
 - CI built `pepper_key.fap` with SHA-256 `df92ccbcdb724163c2550d1ba11c1b957eb39db4b0c0698674e075d4184bca18`.
 - The uploaded CI artifact envelope digest is `32f009a57965c1a1a0b020be98d1f872dfce4d59210582d6b05b58cb66d3b69e`.
 - The CI FAP is not installed or device-accepted and must not replace the v0.1 artifact currently on Pepper.
+- The guarded Pro13 build passed source head `37b0569961c8c95242c67b7d217a481bb96f2d95` with a 69,096-byte FAP, SHA-256 `2efecbd26dc87623ac2b06aca07f6c56d289759696cf5ebe607af172b65bfaa7`.
+- The corresponding CI FAP is also 69,096 bytes. It differs from the Pro13 FAP at exactly four bytes: the host-specific CRC in `.gnu_debuglink` (section offset `0x8ab8`, size 24), matching the documented cross-host build behavior.
 
 Not yet available on the device:
 
@@ -50,9 +52,9 @@ Not yet available on the device:
 - Challenge-response USB transport and physical approval UI.
 - PIV/OpenPGP CCID firmware, Bluetooth authentication, NFC authentication, or portable recovery.
 
-## Current build hold
+## Alpha build evidence
 
-GitHub CI completed the pinned FAP build. The separate guarded Pro13 build remains held because repeated `codex-resource-check` samples crossed the eight-core one-minute-load threshold. Portable native tests and CI do not substitute for a local guarded artifact receipt or device acceptance.
+GitHub CI and the separate guarded Pro13 build both completed with pinned uFBT 0.2.6, F7 SDK 1.4.3, and API 87.1. Earlier attempts were correctly held while Pro13 exceeded the fleet load threshold. Neither alpha artifact has been installed or device-accepted.
 
 ## Rebuild commands
 

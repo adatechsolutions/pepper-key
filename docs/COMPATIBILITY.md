@@ -32,10 +32,10 @@ Installed/read-back candidate:
 
 | Capability | Portable core | FAP build | Device UI/storage | Host protocol | Compatibility |
 |---|---|---|---|---|---|
-| `oath-hotp` | PASS | CI FAP PASS; local guarded build held | Not implemented | N/A | Not tested |
-| `oath-totp` | PASS | CI FAP PASS; local guarded build held | Not implemented | N/A | Not tested |
-| `challenge-response` | PASS | CI FAP PASS; local guarded build held | Not implemented | Not implemented | Not tested |
-| `ctap2` | Fail-closed gate PASS | CI FAP PASS; local guarded build held | Not implemented | Disabled | Not tested |
+| `oath-hotp` | PASS | CI and guarded Pro13 FAP PASS | Not implemented | N/A | Not tested |
+| `oath-totp` | PASS | CI and guarded Pro13 FAP PASS | Not implemented | N/A | Not tested |
+| `challenge-response` | PASS | CI and guarded Pro13 FAP PASS | Not implemented | Not implemented | Not tested |
+| `ctap2` | Fail-closed gate PASS | CI and guarded Pro13 FAP PASS | Not implemented | Disabled | Not tested |
 | `passkeys` | Architecture only | N/A | Not implemented | Disabled | Not tested |
 | `ssh-fido` | Architecture only | N/A | Not implemented | Disabled | Not tested |
 | `piv` | Research only | N/A | Not implemented | Disabled | Not tested |
@@ -50,6 +50,9 @@ Alpha CI receipt:
 - Run: `33664964327`.
 - FAP SHA-256: `df92ccbcdb724163c2550d1ba11c1b957eb39db4b0c0698674e075d4184bca18`.
 - Device status: not installed, not device-tested.
+- Guarded Pro13 source head: `37b0569961c8c95242c67b7d217a481bb96f2d95`.
+- Guarded Pro13 FAP: 69,096 bytes, SHA-256 `2efecbd26dc87623ac2b06aca07f6c56d289759696cf5ebe607af172b65bfaa7`.
+- CI/local comparison: exactly four differing `.gnu_debuglink` CRC bytes; runtime sections and packaged size otherwise match.
 
 ## Adding a result
 
