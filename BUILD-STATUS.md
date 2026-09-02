@@ -1,47 +1,69 @@
 # PepperKey build status
 
-Status: `BUILD_PASS / HOLD_DEVICE_ACCEPTANCE`
+Status: `V0.1_PARTIAL_DEVICE_ACCEPTANCE / V0.2_ALPHA_IMPLEMENTATION`
 
-Date: 2026-09-01
+Date: 2026-09-02
 
-## Completed
+## Device-tested v0.1 evidence
 
-- Forked the official Flipper Zero U2F application from release 1.4.3, commit `8622f1a2b83d8f4918dd5fa3f43de963f6d6f819`.
-- Implemented PepperKey's isolated identity, arming, approval binding, one-shot session, parser, counter, zeroization, and HID hardening.
-- Verified the stock certificate assets are byte-identical to the pinned upstream copies.
-- `ufbt format` completed successfully.
-- `ufbt lint` completed successfully.
-- `tests/check-source.sh` completed successfully.
-- Converted the app manifest to a catalog-style external FAP, added version 0.1 metadata and target F7, and replaced the host-specific provenance test with pinned SHA-256 checks.
-- Added catalog-safe description and changelog files plus a manifest and pull-request draft.
-- Confirmed through the official release source that 1.4.3 remains the latest stock release and that the official U2F path has no commits after that tag.
-- Completed an independent security scan, remediated all three confirmed findings, and passed a fresh bypass/regression review.
-- Corrected internal-firmware-only dependencies so the app builds as a genuine external FAP.
-- Built `app/dist/pepper_key.fap` with uFBT 0.2.6, SDK 1.4.3, target F7, API 87.1.
-- Recorded final candidate SHA-256 `e22b2cd543ad7bc02d4dd55b3b31770a8900a08065c585e1f7a7fb9ea62b445a` (69,096 bytes).
-- GitHub CI passed for commit `a8f50791449169c55c403ffd437a6e3e3ce2214c` and produced a 69,096-byte FAP with SHA-256 `90f4fc146212b51888db0ebb56c0e4a7cc22e6dcc3c0ab40a5c135df04001fd7`.
-- The CI and AdaTech FAPs differ only in the four-byte `.gnu_debuglink` checksum for their host-specific debug ELFs. Physical acceptance must bind to one exact artifact; byte-for-byte cross-host reproducibility is not claimed.
+- Official Flipper Zero firmware 1.4.3 / target F7 / API 87.1.
+- Exact installed and device-read-back FAP: 69,096 bytes, SHA-256 `e22b2cd543ad7bc02d4dd55b3b31770a8900a08065c585e1f7a7fb9ea62b445a`.
+- Stock `/ext/apps/USB/u2f.fap` and `/ext/Manifest` digests remained unchanged.
+- Before-state backup at `outputs/device-acceptance/20260902T165400Z-before` contains a qFlipper internal backup plus all 81 `/ext/apps_data` files; 561,269 bytes passed file-by-file MD5 verification.
+- PepperKey created only `/ext/apps_data/pepper_key/key.u2f` (203 bytes) and `cnt.u2f` (200 bytes).
+- Locked launch, short-press rejection, long-hold arm, U2F HID enumeration, no-request hold, disposable WebAuthn registration, authentication, power-cycle persistence, post-reboot authentication, one-operation lock, management-USB restoration, unchanged key record, and advancing counter record passed.
+- WebAuthn displayed all-zero AAGUID, which is expected for CTAP1/U2F; the inherited stock certificate contains no AAGUID extension.
 
-## Held
+## Remaining v0.1 acceptance
 
-No upload, launch, installation, enrollment, physical device test, disposable-account test, recovery test, or notification-flood fault injection has occurred.
+- Two-minute idle timeout.
+- Unknown-handle and check-only no-prompt harness cases.
+- Second relying-party/application-hash isolation.
+- Controlled corruption and fail-closed persistence cases.
+- Notification flood and terminal-error teardown.
+- Same-device recovery restore.
+- Genuine screenshot, immutable release receipt, Catalog validator, and Catalog moderation.
 
-No genuine tested screenshot is present, no Apps Catalog bundle validation ran, and no catalog pull request was opened. Public source publication and release tagging must record an immutable AdaTech commit and rebuild that exact source before the Catalog submission gate.
+These open gates prohibit calling v0.1 a complete production release.
 
-## Rebuild command
+## 0.2 alpha implementation
 
-Run from the repository root:
+Completed in source:
+
+- Strict Base32 decoding foundation.
+- RFC 4226 HOTP and RFC 6238 TOTP core with SHA-1/SHA-256/SHA-512 and 6–8 digits.
+- HMAC-SHA-256 challenge-response primitive.
+- Labeled FIDO2/OATH/challenge/smart-card/recovery namespace derivation.
+- Versioned and bounded vault-header validation.
+- Stable PepperKey CTAP2 AAGUID plus an explicit false capability gate.
+- Native published-vector, isolation, parser, and fail-closed CTAP2 advertisement tests.
+- Machine-readable capability registry and claim policy.
+
+Not yet available on the device:
+
+- CTAP2 USB CBOR, makeCredential/getAssertion, resident passkeys, PIN/UV, credential management, extensions, or SSH FIDO acceptance.
+- Encrypted OATH profile storage, provisioning UI, code display/typing, RTC integration, or atomic HOTP counter persistence.
+- Challenge-response USB transport and physical approval UI.
+- PIV/OpenPGP CCID firmware, Bluetooth authentication, NFC authentication, or portable recovery.
+
+## Current build hold
+
+At the start of this alpha work, `codex-resource-check` returned `BLOCK` because Pro13's one-minute load met or exceeded its eight online CPUs. No heavy uFBT build may run until that gate passes. Portable native tests are a separate light check and do not substitute for the FAP build.
+
+## Rebuild commands
+
+Portable suite checks:
+
+```sh
+./tests/check-core.sh
+```
+
+Guarded FAP build:
 
 ```sh
 ./scripts/build-release.sh
 ```
 
-The script fails closed on resource, serialization, source-policy, linter, or pin mismatch. It builds only; it never launches or installs the app.
+The release script builds only. It never launches, installs, migrates, enrolls, or resets credentials.
 
-## Current artifact
-
-```text
-app/dist/pepper_key.fap
-```
-
-Treat that artifact as unaccepted until every relevant gate in `ACCEPTANCE.md` passes. A later source change invalidates the hash above and requires a new guarded build.
+Any 0.2 source change invalidates the v0.1 FAP digest as evidence for the new source. Preserve the device-tested v0.1 artifact and rebuild 0.2 from an immutable reviewed commit before device testing.

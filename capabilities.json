@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "product": "PepperKey",
+  "version_line": "0.2.0-alpha",
+  "status_definitions": {
+    "accepted": "Implemented and passed the named source, artifact, device, and compatibility evidence.",
+    "device-tested": "Implemented and passed named device/compatibility checks, but one or more release acceptance gates remain open.",
+    "core-ready": "Portable protocol or cryptographic core is implemented and tested, but no accepted device workflow exists.",
+    "implementation": "Active implementation track; must not be advertised by the device or product claims.",
+    "research": "Architecture and dependency investigation only.",
+    "blocked": "Cannot proceed safely on the current app or hardware boundary."
+  },
+  "capabilities": [
+    {
+      "id": "u2f",
+      "name": "USB U2F/CTAP1",
+      "status": "device-tested",
+      "security_domain": "legacy-fido",
+      "release_gate": "Preserve the v0.1 physical acceptance receipt and repeat it for every changed artifact.",
+      "evidence": [
+        "Disposable WebAuthn registration and authentication",
+        "Power-cycle persistence and post-reboot authentication",
+        "One-operation lock and management USB restoration",
+        "Exact installed FAP read-back hash match"
+      ]
+    },
+    {
+      "id": "ctap2",
+      "name": "USB CTAP2.2 transport and commands",
+      "status": "implementation",
+      "security_domain": "fido2",
+      "release_gate": "CTAP HID, canonical CBOR, command state machine, PIN/UV, persistence, and conformance tests must pass together.",
+      "evidence": []
+    },
+    {
+      "id": "passkeys",
+      "name": "Discoverable WebAuthn credentials",
+      "status": "implementation",
+      "security_domain": "fido2",
+      "release_gate": "CTAP2 makeCredential/getAssertion, resident-key quotas, credential management, PIN/UV, and browser matrix.",
+      "evidence": []
+    },
+    {
+      "id": "ssh-fido",
+      "name": "OpenSSH FIDO-backed keys",
+      "status": "implementation",
+      "security_domain": "fido2",
+      "release_gate": "CTAP2 acceptance plus disposable OpenSSH enrollment, signing, reboot, and recovery tests.",
+      "evidence": []
+    },
+    {
+      "id": "oath-totp",
+      "name": "OATH TOTP",
+      "status": "core-ready",
+      "security_domain": "oath",
+      "release_gate": "Encrypted vault, safe provisioning, RTC drift UI, approval policy, and on-device RFC 6238 vectors.",
+      "evidence": ["Portable RFC 6238 SHA-1, SHA-256, and SHA-512 vectors"]
+    },
+    {
+      "id": "oath-hotp",
+      "name": "OATH HOTP",
+      "status": "core-ready",
+      "security_domain": "oath",
+      "release_gate": "Encrypted counter persistence must be atomic and fail closed before UI release.",
+      "evidence": ["Portable RFC 4226 counters 0 through 9"]
+    },
+    {
+      "id": "challenge-response",
+      "name": "HMAC-SHA-256 challenge-response",
+      "status": "core-ready",
+      "security_domain": "challenge",
+      "release_gate": "Define a bounded authenticated host transport and require request-bound physical approval.",
+      "evidence": ["Portable namespace-isolation and distinct-challenge tests"]
+    },
+    {
+      "id": "piv",
+      "name": "PIV smart-card application",
+      "status": "research",
+      "security_domain": "smart-card",
+      "release_gate": "USB CCID/composite firmware path, APDU parser, PIN policy, certificate provisioning, and NIST SP 800-73 test plan.",
+      "evidence": []
+    },
+    {
+      "id": "openpgp-card",
+      "name": "OpenPGP card application",
+      "status": "research",
+      "security_domain": "smart-card",
+      "release_gate": "USB CCID/composite firmware path, APDU parser, isolated signing/decryption/authentication keys, and GnuPG interoperability.",
+      "evidence": []
+    },
+    {
+      "id": "ble-transport",
+      "name": "Bluetooth authenticator transport",
+      "status": "research",
+      "security_domain": "wireless",
+      "release_gate": "Standards-compatible transport, pairing, privacy, downgrade, relay, disconnect, and radio lifecycle review.",
+      "evidence": []
+    },
+    {
+      "id": "nfc-transport",
+      "name": "NFC authenticator transport",
+      "status": "research",
+      "security_domain": "wireless",
+      "release_gate": "Standards-compatible transport and a field-power, relay, privacy, and teardown assessment.",
+      "evidence": []
+    },
+    {
+      "id": "recovery",
+      "name": "Encrypted backup and recovery",
+      "status": "implementation",
+      "security_domain": "recovery",
+      "release_gate": "Explicit portability policy, authenticated export format, rollback analysis, restore ceremony, and independent recovery authenticator.",
+      "evidence": []
+    }
+  ]
+}

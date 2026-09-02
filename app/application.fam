@@ -8,9 +8,9 @@ App(
     fap_file_assets="files",
     fap_libs=["mbedtls"],
     fap_category="USB",
-    fap_description="Hardened USB U2F authenticator",
+    fap_description="Hardened U2F and authenticator suite alpha",
     fap_weburl="https://github.com/adatechsolutions/pepper-key",
-    fap_version="0.1",
+    fap_version="0.2",
     fap_icon="icon.png",
     targets=["f7"],
 )

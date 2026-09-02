@@ -63,6 +63,51 @@ Use only the disposable test identity and preserve a before-state backup.
 - Confirm that copying the app data to another device is not presented as a supported recovery method.
 - Prove that the account remains accessible with the independent backup authenticator if the Flipper Zero is unavailable.
 
+## 7. Suite alpha source gate
+
+Before a 0.2 alpha artifact is built:
+
+- `./tests/check-core.sh` passes published HOTP/TOTP vectors, Base32 rejection, domain isolation, challenge-response, vault-header, CTAP2 advertisement, and capability-policy tests.
+- v0.1 source/security regression suites still pass.
+- uFBT lint passes with no manifest warning.
+- `capabilities.json` matches README, security, protocol, support, privacy, and claims documents.
+- No generated credentials, OTP seeds/codes, PINs, responses, device data, or recovery material enters source/test logs.
+- Independent review confirms the new modules cannot change accepted U2F runtime behavior merely by being compiled.
+
+A core-ready result does not authorize device provisioning or feature advertisement.
+
+## 8. Capability promotion gate
+
+For every capability moving to `accepted`, create a dated receipt containing:
+
+1. Capability ID, security domain, source commit, dependency/specification versions, and reviewer.
+2. Exact artifact filename, size, SHA-256, build host, target, SDK, and CI result.
+3. Device identity/firmware, before-state backup, installation/read-back, and rollback result.
+4. Positive, negative, malformed, timeout, disconnect, cancellation, flood, power-loss, corruption, quota, reset, and recovery results appropriate to the protocol.
+5. Exact host OS/client/browser/relying-party matrix with failures retained.
+6. Secret/redaction review and genuine screenshots with identifiers removed.
+7. Updated support/privacy/claims/catalog/release materials.
+
+### CTAP2/passkeys
+
+CTAPHID CBOR remains unadvertised until GetInfo, makeCredential, getAssertion/getNextAssertion, ES256, resident/non-resident credentials, PIN/UV, credential management, required extensions, atomic storage, cancellation, reset, conformance, browsers, and OpenSSH pass together.
+
+### OATH
+
+No live seed is provisioned until authenticated encrypted storage, bounded parsing, RTC/drift UX, atomic HOTP counter persistence, reveal/typing policy, deletion, corruption, backup, and 24-hour cross-implementation comparison pass.
+
+### Challenge-response
+
+No USB command is exposed until the transcript-bound protocol, host client, replay/domain separation, request-bound approval, slot lifecycle, redaction, and malformed/fault suites pass.
+
+### Smart card and wireless
+
+PIV/OpenPGP require the separate firmware/CCID and interoperability gate. BLE/NFC require independent transport threat models and standards-compatible implementations. They cannot inherit USB acceptance.
+
+### Recovery
+
+Portable export remains disabled until KDF/AEAD format review, clone/rollback UX, synthetic vectors, cross-platform restore, corruption/power-loss tests, and independent recovery remain proven.
+
 ## Rollback
 
 Before any account enrollment, rollback is removal of the PepperKey FAP and app-specific assets/data using the backed-up before-state. After enrollment, first remove PepperKey from every relying party while another authenticator is working; only then remove its app data. Never delete app data as the first rollback step.

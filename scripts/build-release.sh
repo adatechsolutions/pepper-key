@@ -38,6 +38,7 @@ if ! printf '%s\n' "$ufbt_status" | grep -Eq 'Version[[:space:]]+1\.4\.3$'; then
     exit 76
 fi
 
+sh "$project_dir/tests/check-core.sh"
 sh "$project_dir/tests/check-source.sh"
 sh "$project_dir/tests/check-security-fixes.sh"
 (cd "$app_dir" && "$ufbt" lint)

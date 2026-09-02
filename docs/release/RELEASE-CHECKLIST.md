@@ -13,6 +13,10 @@ Every checked item needs a dated receipt. A later code, manifest, SDK, asset, or
 
 ## Security and build
 
+- [ ] `./tests/check-core.sh` passes.
+- [ ] `capabilities.json` matches public documentation and evidence.
+- [ ] Unaccepted protocol advertisement flags remain false.
+- [ ] New stores have schema, quota, encryption/authentication, atomicity, rollback, reset, and recovery evidence.
 - [ ] `tests/check-source.sh` passes.
 - [ ] `tests/check-security-fixes.sh` passes.
 - [ ] uFBT lint passes.
@@ -45,6 +49,17 @@ Every checked item needs a dated receipt. A later code, manifest, SDK, asset, or
 - [ ] GitHub release notes repeat USB-only/U2F-only/secondary-authenticator limits.
 - [ ] Release attaches FAP, SHA-256 file, source link, acceptance receipt, and rollback notes.
 - [ ] No paid campaign starts before a named owner approves budget, audience, destination, measurement, and stop conditions.
+
+## PepperKey 1.0 capability release
+
+- [ ] Capability-specific receipt links exact commit, artifact, hardware, firmware, client matrix, fault tests, and recovery.
+- [ ] CTAP2/passkeys pass required commands, PIN/UV, credential management/extensions, conformance, browser, and OpenSSH gates before advertisement.
+- [ ] OATH passes encrypted vault, provisioning, RTC/drift, HOTP atomicity, code policy, and 24-hour comparison gates before live seeds.
+- [ ] Challenge-response passes wire protocol, host client, replay/domain, approval, slot, and redaction gates before USB exposure.
+- [ ] PIV/OpenPGP pass firmware/CCID, APDU fuzzing, PIN/retry, key-role, and interoperability gates.
+- [ ] BLE/NFC pass separate standards/transport/privacy/relay/downgrade/teardown reviews.
+- [ ] Portable recovery passes format/KDF/AEAD, clone/rollback, restore, fault, and independent recovery gates.
+- [ ] Claims use `accepted` only for the released capability; research and core-ready work remain visibly qualified.
 
 ## Stop conditions
 

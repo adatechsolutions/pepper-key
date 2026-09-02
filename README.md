@@ -1,50 +1,92 @@
 # PepperKey
 
-PepperKey is a hardened USB U2F/CTAP1 application for Flipper Zero. It is derived from the official Flipper Zero U2F application and targets official stock firmware 1.4.3, target F7, API 87.1.
+PepperKey is an open-source authenticator suite for Flipper Zero from [Ada Tech Solutions Inc.](https://adatechsolutions.ca). The device-tested v0.1 capability is a hardened USB U2F/CTAP1 application with remaining fault/recovery/release gates. The 0.2 alpha line adds independently isolated foundations for passkeys, OATH OTP, challenge-response, smart-card research, and recovery without pretending those paths are already device-ready.
 
-It is maintained by [Ada Tech Solutions Inc.](https://adatechsolutions.ca) in the canonical repository `adatechsolutions/pepper-key`.
+Canonical source: `https://github.com/adatechsolutions/pepper-key`
 
-PepperKey is not a replacement for a purpose-built certified authenticator, a FIDO2/CTAP2 authenticator, a passkey provider, or a FIDO-certified product. Its purpose is to make the strongest honest U2F key possible within Flipper Zero's existing hardware and official application framework.
+PepperKey is not FIDO Certified, tamper-resistant hardware, a biometric authenticator, a cloud-synced passkey provider, or a drop-in replacement for a purpose-built commercial security key. Every capability is fail-closed behind a machine-readable readiness gate in `capabilities.json`.
 
-## Security behavior
+## Capability truth table
 
-- Starts locked. Holding OK explicitly arms a two-minute USB session.
-- Requires a long OK hold for every registration and sign-in, including legacy requests that ask not to enforce presence.
-- Shows the first eight hexadecimal characters of the site's 32-byte U2F application hash. This is a continuity hint, not a human-readable or collision-resistant site identity.
-- Binds approval to the complete 32-byte application hash captured when the prompt appeared.
-- Rejects unknown key handles and U2F check-only probes before displaying an approval prompt.
-- Locks itself three seconds after one successful registration or authentication.
-- Uses constant-time key-handle verification and clears transient key material from RAM.
-- Validates command and key-handle lengths before parsing.
-- Persists the next authentication counter before sending a response, preventing reuse after a storage-write failure.
-- Creates identity records only when both are conclusively absent; corrupt, incomplete, or unreadable state fails closed without replacing the credential root or resetting the counter.
-- Serializes only the 32 ciphertext bytes produced by the enclave API. The unchanged stock attestation asset is read through an explicit legacy envelope path.
-- Disarms, restores the prior USB mode, and zeroizes session keys after a terminal data error.
-- Keeps its identity separate from the stock U2F app.
+| Capability ID | Current state | What exists now |
+|---|---|---|
+| `u2f` | Device-tested on Pepper | USB U2F registration, authentication, reboot persistence, one-shot lock, and artifact read-back passed with a disposable account; fault/recovery/release gates remain |
+| `oath-totp` | Core-ready | RFC 6238 SHA-1/SHA-256/SHA-512 implementation and native vectors; encrypted device vault and UI remain gated |
+| `oath-hotp` | Core-ready | RFC 4226 implementation and counters 0–9 vectors; atomic device counter persistence remains gated |
+| `challenge-response` | Core-ready | HMAC-SHA-256 primitive and isolated namespace derivation; no host transport is advertised |
+| `ctap2` | Implementation | Stable AAGUID and fail-closed readiness API; USB CBOR is intentionally disabled |
+| `passkeys` | Implementation | Architecture and release gates; no discoverable credentials are advertised |
+| `ssh-fido` | Implementation | Depends on accepted CTAP2 registration and assertion paths |
+| `recovery` | Implementation | Policy and record boundary; no portable credential export exists |
+| `piv` | Research | NIST PIV/CCID architecture only |
+| `openpgp-card` | Research | OpenPGP smart-card/CCID architecture only |
+| `ble-transport` | Research | Separate standards, pairing, privacy, relay, and teardown track |
+| `nfc-transport` | Research | Separate transport and field-power threat model |
 
-## Storage
+`core-ready` does not mean available on the Flipper UI. It means the bounded portable core is implemented and passes its named test vectors. A feature becomes accepted only after source review, a pinned artifact, exact-device testing, compatibility testing, failure injection, and recovery evidence.
 
-The packaged attestation assets are extracted by Flipper's FAP loader under the app-specific assets directory. PepperKey creates its mutable identity only after the user explicitly arms it:
+## Suite architecture
+
+PepperKey presents one product but keeps independent security domains:
+
+- Legacy FIDO: the proven v0.1 `u2f` identity and counter.
+- FIDO2: CTAP2 credentials, PIN/UV state, and extensions.
+- OATH: `oath-totp` and `oath-hotp` seeds and counters.
+- Challenge: `challenge-response` keys.
+- Smart card: `piv` and `openpgp-card` signing/decryption/authentication keys.
+- Recovery: encrypted export metadata and restore ceremonies.
+
+The new portable core derives different domain keys using explicit labels and never treats one module's key as another module's root. Wireless transports remain separate because enabling a radio changes the attack surface and lifecycle.
+
+See `docs/architecture/PEPPERKEY-1.0.md`, the protocol specifications under `docs/protocols`, and `SECURITY.md`.
+
+## Device-tested U2F behavior
+
+- Starts locked; a long local OK hold arms a two-minute USB session.
+- Requires a long hold for each registration and authentication.
+- Binds approval to the complete 32-byte U2F application hash.
+- Rejects unknown handles and check-only probes before prompting.
+- Locks after one successful operation.
+- Persists the next authentication counter before returning a signature.
+- Fails closed on incomplete, malformed, unreadable, or undecryptable state.
+- Restores the previous USB mode and zeroizes the session after terminal error or lock.
+
+The device-tested U2F records remain:
 
 - `/ext/apps_data/pepper_key/key.u2f`
 - `/ext/apps_data/pepper_key/cnt.u2f`
 
-The device key and counter are encrypted with the Flipper Zero's device-unique enclave key. Do not inspect, publish, edit, delete, or casually restore these files. A same-device backup may recover an SD-card failure, but it cannot create a replacement authenticator on another Flipper.
+Do not inspect, publish, edit, delete, or casually restore these files. They are bound to the original device's enclave key.
 
-PepperKey never silently regenerates incomplete or unreadable app data. If both files are absent, it treats the next explicit arm as a clean first run. Deleting both files therefore creates a new authenticator identity, and accounts registered to the old identity may become inaccessible. If only one file is missing or either record is invalid, PepperKey remains locked so the owner can recover a known-good same-device backup or make an explicit destructive reset decision.
+## Development and tests
+
+Run the portable suite checks:
+
+```sh
+./tests/check-core.sh
+```
+
+Run the v0.1 source/security checks:
+
+```sh
+./tests/check-source.sh
+./tests/check-security-fixes.sh
+```
+
+Run the guarded FAP build only on the authorized AdaTech build host:
+
+```sh
+./scripts/build-release.sh
+```
+
+The guarded build refuses to run when the AdaTech resource or heavy-job gate is unavailable. It never installs, flashes, launches, enrolls, or migrates credentials.
 
 ## Safe account setup
 
-1. Register a separate FIDO2 security key or trusted passkey first.
-2. Save the account's recovery codes offline.
-3. Register PepperKey only as a secondary authenticator.
-4. Test registration and sign-in on a non-critical account before wider use.
-5. Never remove the primary authenticator until PepperKey has passed the complete acceptance plan.
+1. Register a separate certified security key or trusted passkey first.
+2. Save account recovery codes offline.
+3. Use PepperKey only as a secondary authenticator.
+4. Test with disposable or non-critical accounts before wider use.
+5. Never remove the independent authenticator based on a build or demo alone.
 
-See `ACCEPTANCE.md` for the build, installation, test, and recovery gates. See `SECURITY.md` for the threat model and residual risks.
-
-## Current status
-
-The source candidate has passed focused source checks, uFBT lint, an independent security review/remediation cycle, and a pinned external-FAP build. Installation, physical device testing, disposable-account compatibility, recovery testing, a genuine screenshot, immutable release binding, and Apps Catalog moderation remain separate gates. A successful build alone does not establish that a browser, service, or signed-in account accepts PepperKey.
-
-See `BUILD-STATUS.md` for the exact current evidence, `SUPPORT.md` for support boundaries, and `docs/marketing/CLAIMS-GUIDE.md` before publishing product claims.
+See `ACCEPTANCE.md` for release gates, `BUILD-STATUS.md` for evidence, `SUPPORT.md` for support boundaries, and `docs/marketing/CLAIMS-GUIDE.md` before publishing claims.
