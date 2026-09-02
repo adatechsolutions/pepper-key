@@ -38,6 +38,10 @@ Completed in source:
 - Stable PepperKey CTAP2 AAGUID plus an explicit false capability gate.
 - Native published-vector, isolation, parser, and fail-closed CTAP2 advertisement tests.
 - Machine-readable capability registry and claim policy.
+- GitHub CI passed commit `7dde1683a46d9ca3a9b648554504ed9ce77fc305` in run `33664964327` using pinned uFBT 0.2.6 and official F7 SDK 1.4.3.
+- CI built `pepper_key.fap` with SHA-256 `df92ccbcdb724163c2550d1ba11c1b957eb39db4b0c0698674e075d4184bca18`.
+- The uploaded CI artifact envelope digest is `32f009a57965c1a1a0b020be98d1f872dfce4d59210582d6b05b58cb66d3b69e`.
+- The CI FAP is not installed or device-accepted and must not replace the v0.1 artifact currently on Pepper.
 
 Not yet available on the device:
 
@@ -48,7 +52,7 @@ Not yet available on the device:
 
 ## Current build hold
 
-At the start of this alpha work, `codex-resource-check` returned `BLOCK` because Pro13's one-minute load met or exceeded its eight online CPUs. No heavy uFBT build may run until that gate passes. Portable native tests are a separate light check and do not substitute for the FAP build.
+GitHub CI completed the pinned FAP build. The separate guarded Pro13 build remains held because repeated `codex-resource-check` samples crossed the eight-core one-minute-load threshold. Portable native tests and CI do not substitute for a local guarded artifact receipt or device acceptance.
 
 ## Rebuild commands
 

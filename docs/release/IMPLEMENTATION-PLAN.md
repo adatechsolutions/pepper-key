@@ -15,7 +15,8 @@ Work lands in reviewable slices. A source-complete module remains disabled until
 - [x] Assign CTAP2 model AAGUID.
 - [x] Add fail-closed capability/readiness registry.
 - [x] Add architecture, protocol, recovery, security, and claims documents.
-- [ ] Pass pinned uFBT lint/build from an allowed resource window.
+- [x] Pass pinned uFBT lint/build in GitHub CI for commit `7dde1683a46d9ca3a9b648554504ed9ce77fc305`.
+- [ ] Pass the separate guarded Pro13 build from an allowed resource window.
 - [ ] Independently review this alpha diff.
 
 ## FIDO2 transport and parser — 0.3
